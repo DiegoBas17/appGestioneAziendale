@@ -8,7 +8,7 @@ public class AppGestioneAziendaleApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(AppGestioneAziendaleApplication.class, args);
-		System.out.println("Sono Fabio");
+		System.out.println("Sono Alberto e ho modificato il file");
 	}
 
 }
