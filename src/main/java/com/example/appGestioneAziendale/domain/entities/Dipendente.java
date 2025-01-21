@@ -43,7 +43,9 @@ public class Dipendente {
     private String avatar;
     @Column(nullable = false)
     private Ruolo ruolo;
-    //private PosizioneLavorativa posizioneLavorativa;
+    @ManyToOne
+    @JoinColumn(name = "id_posizione_lavorativa", referencedColumnName = "id")
+    private PosizioneLavorativa posizioneLavorativa;
     @CreatedDate
     @Column(name = "created_at")
     private LocalDateTime createdAt;
