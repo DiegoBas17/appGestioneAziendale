@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 @Table(name = "dipendente")
 @EntityListeners(AuditingEntityListener.class)
 public class Dipendente {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
