@@ -13,22 +13,18 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Table(name = "comunicazione_aziendale")
 @EntityListeners(AuditingEntityListener.class)
 public class ComunicazioneAziendale {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(nullable = false)
     private String testo;
-
     @Column(nullable = false)
     private String allegato_url;
-
     @Column(name = "id_publisher", nullable = false)
     private Integer id_publisher;
-
-    @ManyToOne(optional = false)
-    private Dipendente dipendente;
+    @ManyToOne
+    @JoinColumn(name = "id_dipendente", referencedColumnName = "id")
+    private Dipendente idDipendente;
 
 
 

@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 @Table(name = "timbratura")
 @EntityListeners(AuditingEntityListener.class)
 public class Timbratura {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,6 +27,7 @@ public class Timbratura {
     private LocalDateTime inizioPausaPranzo;
     @Column(nullable = false, name = "fine_pausa_pranzo")
     private LocalDateTime finePausaPranzo;
-
-    //private Dipendente id_dipendente;
+    @ManyToOne
+    @JoinColumn(name = "id_dipendente", referencedColumnName = "id")
+    private Dipendente idDipendente;
 }
