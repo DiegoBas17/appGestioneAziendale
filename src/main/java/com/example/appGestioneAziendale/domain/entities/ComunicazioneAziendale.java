@@ -24,7 +24,8 @@ public class ComunicazioneAziendale {
     @Column(nullable = false)
     private String allegato_url;
 
-    @Column(name = "id_publisher", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "id_publisher", nullable = false)
     private Integer id_publisher;
 
     @ManyToOne(optional = false)
