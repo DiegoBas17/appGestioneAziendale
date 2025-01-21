@@ -10,12 +10,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "PosizioneLavorativa")
+@Table(name = "dipartimento")
 @EntityListeners(AuditingEntityListener.class)
-
-
-
-public class PosizioneLavorativa {
+public class Dipartimento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,7 +20,4 @@ public class PosizioneLavorativa {
     private String nome;
     @Column(nullable = false)
     private String descrizione;
-    @ManyToOne
-    @JoinColumn(name = "id_dipartimento", referencedColumnName = "id")
-    private Dipartimento dipartimento;
 }
