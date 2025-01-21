@@ -10,7 +10,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "PosizioneLavorativa")
+@Table(name = "posizione_lavorativa")
 @EntityListeners(AuditingEntityListener.class)
 
 
