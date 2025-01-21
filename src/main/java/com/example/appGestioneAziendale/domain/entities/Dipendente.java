@@ -1,5 +1,6 @@
 package com.example.appGestioneAziendale.domain.entities;
 
+import com.example.appGestioneAziendale.domain.enums.Ruolo;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedBy;
@@ -40,6 +41,8 @@ public class Dipendente {
     private String telefono;
     @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String avatar;
+    @Column(nullable = false)
+    private Ruolo ruolo;
     //private PosizioneLavorativa posizioneLavorativa;
     @CreatedDate
     @Column(name = "created_at")
