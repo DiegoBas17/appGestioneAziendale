@@ -20,17 +20,7 @@ public class ComunicazioneAziendale {
     private String testo;
     @Column(nullable = false)
     private String allegato_url;
-
     @ManyToOne
-    @JoinColumn(name = "id_publisher", nullable = false)
-    private Integer id_publisher;
-    @ManyToOne
-    @JoinColumn(name = "id_dipendente", referencedColumnName = "id")
+    @JoinColumn(name = "id_publisher", referencedColumnName = "id")
     private Dipendente idDipendente;
-
-
-
-
-
-
 }
