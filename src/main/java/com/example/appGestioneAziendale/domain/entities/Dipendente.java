@@ -45,7 +45,7 @@ public class Dipendente {
     private Ruolo ruolo;
     @ManyToOne
     @JoinColumn(name = "id_posizione_lavorativa", referencedColumnName = "id")
-    private PosizioneLavorativa posizioneLavorativa;
+    private PosizioneLavorativa idPosizioneLavorativa;
     @CreatedDate
     @Column(name = "created_at")
     private LocalDateTime createdAt;
