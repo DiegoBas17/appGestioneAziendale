@@ -19,7 +19,6 @@ import java.time.LocalDateTime;
 @Table(name = "news")
 @EntityListeners(AuditingEntityListener.class)
 public class News {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,8 +30,9 @@ public class News {
     private String image_url;
     @Column(nullable = false)
     private String allegato_url;
-
-   // private Dipendente id_publisher;
+    @ManyToOne
+    @JoinColumn(name = "id_publisher", referencedColumnName = "id")
+    private Dipendente idPublisher;
     @CreatedDate
     @Column(name = "created_at")
     private LocalDateTime createdAt;
