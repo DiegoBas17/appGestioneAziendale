@@ -3,5 +3,5 @@ package com.example.appGestioneAziendale.services;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DipendenteService {
+public class ComuneService {
 }
