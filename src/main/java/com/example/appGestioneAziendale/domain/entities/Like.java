@@ -13,7 +13,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "like")
+@Table(name = "likes")
 @EntityListeners(AuditingEntityListener.class)
 public class Like {
 

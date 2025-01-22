@@ -8,7 +8,6 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -21,6 +20,7 @@ import java.time.LocalDateTime;
 @Table(name = "dipendente")
 @EntityListeners(AuditingEntityListener.class)
 public class Dipendente {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
@@ -33,7 +33,7 @@ public class Dipendente {
     @Column(nullable = false)
     private String password;
     @ManyToOne(optional = false)
-    @Column(name = "comune_di_nascita", nullable = false)
+    @JoinColumn(name = "comune_di_nascita", referencedColumnName = "nome")
     private Comune comuneDiNascita;
     @Column(name = "data_nascita", nullable = false)
     private LocalDate dataDiNascita;
