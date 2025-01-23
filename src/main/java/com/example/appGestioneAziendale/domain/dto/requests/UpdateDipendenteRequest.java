@@ -7,15 +7,13 @@ import jakarta.validation.constraints.Past;
 
 import java.time.LocalDate;
 
-public record DipendenteRequest(
+public record UpdateDipendenteRequest(
         @NotBlank(message = "Il nome non può essere blank o null")
         String nome,
         @NotBlank(message = "Il cognome non può essere blank o null")
         String cognome,
         @Email(message = "Email non valida")
         String email,
-        @NotBlank(message = "La password non può essere blank o null")
-        String password,
         @NotNull(message = "Comune non presente")
         EntityIdRequest comune_di_nascita,
         @Past
