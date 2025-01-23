@@ -5,7 +5,6 @@ import com.example.appGestioneAziendale.domain.dto.response.EntityIdResponse;
 import com.example.appGestioneAziendale.domain.dto.response.NewsResponse;
 import com.example.appGestioneAziendale.domain.entities.News;
 import com.example.appGestioneAziendale.domain.exceptions.MyEntityNotFoundException;
-import com.example.appGestioneAziendale.repository.NewsRepository;
 import com.example.appGestioneAziendale.services.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,8 +19,6 @@ public class NewsController {
 
     @Autowired
     private NewsService newsService;
-    @Autowired
-    private NewsRepository newsRepository;
 
     @GetMapping("/get/{id}")
     public ResponseEntity<News> getNewsById(@PathVariable Long id) throws MyEntityNotFoundException {
