@@ -35,8 +35,8 @@ public class NewsService {
     }
 
 
-    public EntityIdResponse updateNews(NewsResponse response){
-        News news = getById(response.id());
+    public EntityIdResponse updateNews(Long id,NewsResponse response){
+        News news = getById(id);
         news.setTitolo(response.titolo());
         news.setTesto(response.testo());
         news.setAllegato_url(response.allegato());
