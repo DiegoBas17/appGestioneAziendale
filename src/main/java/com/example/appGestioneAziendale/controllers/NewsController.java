@@ -36,13 +36,8 @@ public class NewsController {
         return new ResponseEntity<>(newsService.createNews(request), HttpStatus.CREATED);
     }
     @PutMapping("/update/{id}")
-    public EntityIdResponse updateNews(@PathVariable Long id, @RequestBody CreateNewsRequest request) throws  MyEntityNotFoundException{
-        News news = getNewsById(id).getBody();
-        if (request.titolo() != null) news.setTitolo(request.titolo());
-        if (request.testo() != null) news.setTesto(request.testo());
-        if (request.image_url() != null) news.setImage_url(request.image_url());
-        if (request.allegato() != null) news.setAllegato_url(request.allegato());
-        return new EntityIdResponse(newsRepository.save(news).getId());
+    public ResponseEntity<EntityIdResponse> updateNews(@PathVariable Long id, @RequestBody NewsResponse response) throws  MyEntityNotFoundException{
+        return new ResponseEntity<>(newsService.updateNews(id, response), HttpStatus.OK);
     }
     @DeleteMapping("/delete/{id}")
     public void deleteById(@PathVariable Long id) throws MyEntityNotFoundException{
