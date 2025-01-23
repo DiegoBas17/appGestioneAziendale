@@ -16,10 +16,13 @@ public class PosizioneLavorativa {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(nullable = false)
     private String nome;
+
     @Column(nullable = false)
     private String descrizione;
+
     @ManyToOne
     @JoinColumn(name = "id_dipartimento", referencedColumnName = "id")
     private Dipartimento idDipartimento;
