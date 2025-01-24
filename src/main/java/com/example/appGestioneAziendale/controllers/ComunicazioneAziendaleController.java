@@ -1,7 +1,7 @@
 package com.example.appGestioneAziendale.controllers;
 
 import com.example.appGestioneAziendale.domain.dto.requests.ComunicazioneAziendaleRequest;
-import com.example.appGestioneAziendale.domain.dto.response.ComunicazioneAziendaleResponse;
+import com.example.appGestioneAziendale.domain.dto.response.EntityIdResponse;
 import com.example.appGestioneAziendale.services.ComunicazioneAziendaleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +18,11 @@ public class ComunicazioneAziendaleController {
     @Autowired
     private ComunicazioneAziendaleService comunicazioneAziendaleService;
 
-    @PostMapping("/create")
-    public ResponseEntity<ComunicazioneAziendaleResponse> createComunicazioneAziendale(
+    @PostMapping("/create/{idDipendente}")
+    public ResponseEntity<EntityIdResponse> createComunicazioneAziendale(
+            @PathVariable Long idDipendente,
             @RequestBody ComunicazioneAziendaleRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(comunicazioneAziendaleService.createComunicazioneAziendale(request));
+                .body(comunicazioneAziendaleService.createComunicazioneAziendale(idDipendente, request));
     }
-
-
-
 }

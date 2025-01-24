@@ -1,7 +1,7 @@
 package com.example.appGestioneAziendale.services;
 
 import com.example.appGestioneAziendale.domain.dto.requests.ComunicazioneAziendaleRequest;
-import com.example.appGestioneAziendale.domain.dto.response.ComunicazioneAziendaleResponse;
+import com.example.appGestioneAziendale.domain.dto.response.EntityIdResponse;
 import com.example.appGestioneAziendale.domain.entities.ComunicazioneAziendale;
 import com.example.appGestioneAziendale.mappers.ComunicazioneAziendaleMapper;
 import com.example.appGestioneAziendale.repository.ComunicazioneAziendaleRepository;
@@ -19,15 +19,9 @@ public class ComunicazioneAziendaleService {
     @Autowired
     private ComunicazioneAziendaleMapper comunicazioneAziendaleMapper;
 
-    public ComunicazioneAziendaleResponse createComunicazioneAziendale(ComunicazioneAziendaleRequest request) {
-        // Conversione DTO in entità
-        ComunicazioneAziendale comunicazioneAziendale = comunicazioneAziendaleMapper.toEntity(request);
-
-        // Salvataggio
-        ComunicazioneAziendale salvato = comunicazioneAziendaleRepository.save(comunicazioneAziendale);
-
-        // Conversione in risposta
-        return comunicazioneAziendaleMapper.toResponse(salvato);
+    public EntityIdResponse createComunicazioneAziendale(Long idDipendente, ComunicazioneAziendaleRequest request) {
+        ComunicazioneAziendale comunicazioneAziendale = comunicazioneAziendaleMapper.toEntity(idDipendente, request);
+        return new EntityIdResponse(comunicazioneAziendaleRepository.save(comunicazioneAziendale).getId());
     }
 
 }
