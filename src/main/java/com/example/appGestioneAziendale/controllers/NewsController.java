@@ -20,31 +20,25 @@ public class NewsController {
 
     @Autowired
     private NewsService newsService;
-    @Autowired
-    private NewsRepository newsRepository;
 
     @GetMapping("/get/{id}")
     public ResponseEntity<News> getNewsById(@PathVariable Long id) throws MyEntityNotFoundException {
         return new ResponseEntity<>(newsService.getById(id), HttpStatus.OK);
     }
-    
-    @GetMapping("/all")
-    public ResponseEntity<List<News>> getAll() {
+    @GetMapping("/getAll")
+    public ResponseEntity<List<News>> getAll(){
         return new ResponseEntity<>(newsService.getAll(), HttpStatus.OK);
     }
-
     @PostMapping("/create")
-    public ResponseEntity<EntityIdResponse> createNews(@RequestBody CreateNewsRequest request) {
+    public ResponseEntity<EntityIdResponse> createNews(@RequestBody @Valid CreateNewsRequest request){
         return new ResponseEntity<>(newsService.createNews(request), HttpStatus.CREATED);
     }
-
     @PutMapping("/update/{id}")
-    public ResponseEntity<EntityIdResponse> updateNews(@PathVariable Long id, @RequestBody NewsResponse response) throws MyEntityNotFoundException {
+    public ResponseEntity<EntityIdResponse> updateNews(@PathVariable Long id, @RequestBody @Valid NewsResponse response) throws  MyEntityNotFoundException{
         return new ResponseEntity<>(newsService.updateNews(id, response), HttpStatus.OK);
     }
-
     @DeleteMapping("/delete/{id}")
-    public void deleteById(@PathVariable Long id) throws MyEntityNotFoundException {
+    public void deleteById(@PathVariable Long id) throws MyEntityNotFoundException{
         newsService.deleteById(id);
     }
 }
