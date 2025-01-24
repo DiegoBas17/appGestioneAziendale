@@ -5,6 +5,7 @@ import com.example.appGestioneAziendale.domain.dto.response.ComunicazioneAzienda
 import com.example.appGestioneAziendale.domain.dto.response.EntityIdResponse;
 import com.example.appGestioneAziendale.domain.entities.ComunicazioneAziendale;
 import com.example.appGestioneAziendale.services.ComunicazioneAziendaleService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
