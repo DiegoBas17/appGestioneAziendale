@@ -15,20 +15,21 @@ import java.util.List;
 @RestController
 @RequestMapping("/timbrature")
 public class TimbraturaController {
-
     @Autowired
     private TimbraturaService timbraturaService;
 
     @GetMapping("/getById/{id}")
-    public ResponseEntity<Timbratura> getTimbraturaById(@PathVariable Long id) throws MyEntityNotFoundException{
+    public ResponseEntity<Timbratura> getTimbraturaById(@PathVariable Long id) throws MyEntityNotFoundException {
         return new ResponseEntity<>(timbraturaService.getById(id), HttpStatus.OK);
     }
+
     @GetMapping("/getAll")
-    public ResponseEntity<List<Timbratura>> getAllTimbrature(){
+    public ResponseEntity<List<Timbratura>> getAllTimbrature() {
         return new ResponseEntity<>(timbraturaService.findAll(), HttpStatus.OK);
     }
+
     @PostMapping("/create")
-    public ResponseEntity<EntityIdResponse> createTimbratura(@RequestBody TimbraturaRequest request){
+    public ResponseEntity<EntityIdResponse> createTimbratura(@RequestBody TimbraturaRequest request) {
         return new ResponseEntity<>(timbraturaService.createTimbratura(request), HttpStatus.CREATED);
     }
 }

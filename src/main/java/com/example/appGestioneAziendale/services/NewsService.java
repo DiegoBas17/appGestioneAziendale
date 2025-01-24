@@ -11,23 +11,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Service
 public class NewsService {
-
     @Autowired
     private NewsRepository newsRepository;
     @Autowired
     private NewsMapper newsMapper;
 
-    public News getById(Long id) throws MyEntityNotFoundException{
+    public News getById(Long id) throws MyEntityNotFoundException {
         return newsRepository.findById(id).orElseThrow(() -> new MyEntityNotFoundException("la news con id " + id + " non esiste"));
     }
 
-    public List<News> getAll(){
+    public List<News> getAll() {
         return newsRepository.findAll();
     }
 
-    public EntityIdResponse createNews(CreateNewsRequest request){
+    public EntityIdResponse createNews(CreateNewsRequest request) {
         News news = newsMapper.fromCreateNewsRequest(request);
         return EntityIdResponse.
                 builder()
@@ -35,8 +35,7 @@ public class NewsService {
                 .build();
     }
 
-
-    public EntityIdResponse updateNews(Long id,NewsResponse response){
+    public EntityIdResponse updateNews(Long id, NewsResponse response) {
         News news = getById(id);
         news.setTitolo(response.titolo());
         news.setTesto(response.testo());
