@@ -7,7 +7,7 @@ public record ComunicazioneAziendaleResponse(
         Long id,
         String testo,
         String allegato_url,
-        DipendenteResponse idDipendente
+        EntityIdResponse idDipendente
 
 ) {
 
