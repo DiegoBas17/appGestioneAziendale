@@ -6,6 +6,7 @@ import com.example.appGestioneAziendale.domain.dto.response.NewsResponse;
 import com.example.appGestioneAziendale.domain.entities.News;
 import com.example.appGestioneAziendale.domain.exceptions.MyEntityNotFoundException;
 import com.example.appGestioneAziendale.services.NewsService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,16 +25,16 @@ public class NewsController {
     public ResponseEntity<News> getNewsById(@PathVariable Long id) throws MyEntityNotFoundException {
         return new ResponseEntity<>(newsService.getById(id), HttpStatus.OK);
     }
-    @GetMapping("/all")
+    @GetMapping("/getAll")
     public ResponseEntity<List<News>> getAll(){
         return new ResponseEntity<>(newsService.getAll(), HttpStatus.OK);
     }
     @PostMapping("/create")
-    public ResponseEntity<EntityIdResponse> createNews(@RequestBody CreateNewsRequest request){
+    public ResponseEntity<EntityIdResponse> createNews(@RequestBody @Valid CreateNewsRequest request){
         return new ResponseEntity<>(newsService.createNews(request), HttpStatus.CREATED);
     }
     @PutMapping("/update/{id}")
-    public ResponseEntity<EntityIdResponse> updateNews(@PathVariable Long id, @RequestBody NewsResponse response) throws  MyEntityNotFoundException{
+    public ResponseEntity<EntityIdResponse> updateNews(@PathVariable Long id, @RequestBody @Valid NewsResponse response) throws  MyEntityNotFoundException{
         return new ResponseEntity<>(newsService.updateNews(id, response), HttpStatus.OK);
     }
     @DeleteMapping("/delete/{id}")
