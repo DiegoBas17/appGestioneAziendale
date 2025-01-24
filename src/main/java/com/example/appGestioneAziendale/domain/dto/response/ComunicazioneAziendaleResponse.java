@@ -6,8 +6,7 @@ import lombok.Builder;
 public record ComunicazioneAziendaleResponse(
         Long id,
         String testo,
-        String allegato_url,
-        DipendenteResponse idDipendente
+        String allegato_url
 
 ) {
 
