@@ -7,6 +7,7 @@ import com.example.appGestioneAziendale.domain.exceptions.MyEntityNotFoundExcept
 import com.example.appGestioneAziendale.services.DipendenteService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 @Service
@@ -15,7 +16,7 @@ public class TimbraturaMapper {
 
     public Timbratura fromTimbraturaRequest(TimbraturaRequest request){
         return Timbratura.builder()
-                .ingresso(request.ingresso())
+                .ingresso(LocalDateTime.now())
                 .uscita(request.uscita())
                 .inizioPausaPranzo(request.inizioPausa())
                 .finePausaPranzo(request.finePausa())
