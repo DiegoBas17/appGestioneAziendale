@@ -20,8 +20,10 @@ public class ComunicazioneAziendaleService {
     private ComunicazioneAziendaleMapper comunicazioneAziendaleMapper;
 
     public ComunicazioneAziendale getById(Long id) throws MyEntityNotFoundException {
-        return comunicazioneAziendaleRepository.findById(id)
-                .orElseThrow(() -> new MyEntityNotFoundException("Le comunicazioni aziendali con id " + id + " non esistono"));
+        return comunicazioneAziendaleRepository
+                .findById(id)
+                .orElseThrow(
+                        () -> new MyEntityNotFoundException("Le comunicazioni aziendali con id " + id + " non esistono"));
     }
 
     public List<ComunicazioneAziendale> getAll() {
@@ -34,9 +36,10 @@ public class ComunicazioneAziendaleService {
     }
 
     public EntityIdResponse updateComunicazioneAziendale(Long id, ComunicazioneAziendaleResponse response) {
-        ComunicazioneAziendale comunicazioneAziendale = comunicazioneAziendaleRepository.findById(id)
-                .orElseThrow(() -> new MyEntityNotFoundException("La comunicazione aziendale con id " + id + " non esiste"));
-
+        ComunicazioneAziendale comunicazioneAziendale = comunicazioneAziendaleRepository
+                .findById(id)
+                .orElseThrow(
+                        () -> new MyEntityNotFoundException("La comunicazione aziendale con id " + id + " non esiste"));
         comunicazioneAziendale.setTesto(response.testo());
         comunicazioneAziendale.setAllegato_url(response.allegato_url());
 
@@ -46,6 +49,4 @@ public class ComunicazioneAziendaleService {
     public void deleteById(Long id) {
         comunicazioneAziendaleRepository.deleteById(id);
     }
-
-
 }

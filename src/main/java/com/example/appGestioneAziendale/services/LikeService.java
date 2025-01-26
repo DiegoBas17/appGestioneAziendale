@@ -13,6 +13,8 @@ import com.example.appGestioneAziendale.repository.NewsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class LikeService {
     @Autowired
@@ -31,13 +33,39 @@ public class LikeService {
         Dipendente dipendente = dipendenteRepository.findById(request.DipendenteId())
                 .orElseThrow(() -> new MyEntityNotFoundException("Dipendente non trovato con id: " + request.DipendenteId()));
 
-        // Creazione Like
-        Like like = likeMapper.toEntity(request, news, dipendente);
+        // Verifico se ci sta il duplicato del like
+        if (likeRepository.existsByNewsAndDipendente(news, dipendente)) {
+            throw new IllegalArgumentException(
+                    "Il dipendente con ID " + dipendente.getId() + " ha già messo like alla news con ID " + news.getId()
+            );
+        }
 
-        // Salvataggio e conversione in risposta
-        Like savedLike = likeRepository.save(like);
-        return likeMapper.toResponse(savedLike);
+        // Creazione del like
+        Like like = likeMapper.toEntity(news, dipendente);
+        likeRepository.save(like);
+
+        // Ritorna la risposta del Like creato
+        return likeMapper.toResponse(like);
     }
+
+    public Like getById(Long id) {
+        return likeRepository.findById(id)
+                .orElseThrow(() -> new MyEntityNotFoundException("Like non trovato con id: " + id));
+    }
+
+    public List<Like> getAll() {
+        return likeRepository.findAll();
+    }
+
+    public void deleteById(Long id) {
+        if (!likeRepository.existsById(id)) {
+            throw new MyEntityNotFoundException("Like con id " + id + " non trovato!"
+            );
+        }
+        likeRepository.deleteById(id);
+    }
+
+
 
 
 }
