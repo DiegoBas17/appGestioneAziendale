@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/dipendente")
+@RequestMapping("/dipendenti")
 public class DipendenteController {
     @Autowired
     private DipendenteService dipendenteService;

@@ -16,7 +16,7 @@ public record CreateDipendenteRequest(
         String email,
         @NotBlank(message = "La password non può essere blank o null")
         String password,
-        @NotNull(message = "Comune non presente")
+        @NotNull(message = "Comune non puo essere null")
         EntityIdRequest comune_di_nascita,
         @Past
         LocalDate data_di_nascita,

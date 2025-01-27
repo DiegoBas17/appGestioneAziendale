@@ -31,7 +31,7 @@ public class DipendenteService {
         return dipendenteRepository.findAll();
     }
 
-    public EntityIdResponse createDipendente(CreateDipendenteRequest request) throws MyEntityNotFoundException {
+    public EntityIdResponse createDipendente(CreateDipendenteRequest request) {
         Dipendente dipendente = dipendenteRepository.save(dipendenteMapper.fromCreateDipendenteRequest(request));
         return new EntityIdResponse(dipendente.getId());
     }
