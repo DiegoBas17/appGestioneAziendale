@@ -1,5 +1,6 @@
 package com.example.appGestioneAziendale.domain.dto.requests;
 
+import com.example.appGestioneAziendale.domain.entities.Dipendente;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -18,6 +19,6 @@ public record CreateNewsRequest (
         @NotNull
         String allegato,
         @NotEmpty
-        List<Long> idPublisher
+        Dipendente idPublisher
 ){
 }
