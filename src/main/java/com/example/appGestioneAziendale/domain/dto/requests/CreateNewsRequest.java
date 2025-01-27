@@ -19,6 +19,6 @@ public record CreateNewsRequest (
         @NotNull
         String allegato,
         @NotEmpty
-        Dipendente idPublisher
+        Long idPublisher
 ){
 }
