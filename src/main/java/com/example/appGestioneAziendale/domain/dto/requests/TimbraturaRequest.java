@@ -12,6 +12,6 @@ public record TimbraturaRequest(
         LocalDateTime inizioPausa,
         LocalDateTime finePausa,
         @NotEmpty
-        Dipendente idDipendente
+        Long idDipendente
 ) {
 }
