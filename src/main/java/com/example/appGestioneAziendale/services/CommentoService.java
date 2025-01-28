@@ -5,6 +5,7 @@ import com.example.appGestioneAziendale.domain.dto.requests.UpdateCommentoReques
 import com.example.appGestioneAziendale.domain.dto.response.EntityIdResponse;
 import com.example.appGestioneAziendale.domain.entities.Commento;
 import com.example.appGestioneAziendale.domain.exceptions.MyEntityNotFoundException;
+import com.example.appGestioneAziendale.domain.exceptions.MyIllegalException;
 import com.example.appGestioneAziendale.mappers.CommentoMapper;
 import com.example.appGestioneAziendale.repository.CommentoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +33,9 @@ public class CommentoService {
         return commentoRepository.findAll();
     }
 
-    public void deleteDipendente(Long id) {
-        commentoRepository.deleteById(id);
+    public void deleteCommento(Long id) {
+        Commento commento = getById(id);
+        commentoRepository.deleteById(commento.getId());
     }
 
     public EntityIdResponse createCommento(CreateCommentoRequest request) {
@@ -43,9 +45,11 @@ public class CommentoService {
 
     public EntityIdResponse updateCommento(Long id, UpdateCommentoRequest request) {
         Commento commento = getById(id);
-        commento.setTesto(request.testo());
-        commento.setNews(newsService.getById(request.news().id()));
-        commento.setDipendente(dipendenteService.getById(request.dipendente().id()));
+        if (request.testo() != null) commento.setTesto(request.testo());
+        if (request.news() != null) commento.setNews(newsService.getById(request.news().id()));
+        if (request.dipendente() != null) commento.setDipendente(dipendenteService.getById(request.dipendente().id()));
+        if (request.testo() == null && request.news() == null && request.dipendente() == null)
+            throw new MyIllegalException("Per fare un update devi almeno inserire un campo");
         return new EntityIdResponse(commentoRepository.save(commento).getId());
     }
 }
