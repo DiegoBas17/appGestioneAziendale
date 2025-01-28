@@ -18,7 +18,7 @@ public record CreateNewsRequest (
         String image_url,
         @NotNull
         String allegato,
-        @NotEmpty
+        @NotNull
         Long idPublisher
 ){
 }
