@@ -1,10 +1,11 @@
 package com.example.appGestioneAziendale.services;
 
 import com.example.appGestioneAziendale.domain.dto.requests.ComunicazioneAziendaleRequest;
-import com.example.appGestioneAziendale.domain.dto.response.ComunicazioneAziendaleResponse;
+import com.example.appGestioneAziendale.domain.dto.requests.UpdateComunicazioneAziendaleRequest;
 import com.example.appGestioneAziendale.domain.dto.response.EntityIdResponse;
 import com.example.appGestioneAziendale.domain.entities.ComunicazioneAziendale;
 import com.example.appGestioneAziendale.domain.exceptions.MyEntityNotFoundException;
+import com.example.appGestioneAziendale.domain.exceptions.MyIllegalException;
 import com.example.appGestioneAziendale.mappers.ComunicazioneAziendaleMapper;
 import com.example.appGestioneAziendale.repository.ComunicazioneAziendaleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,8 @@ public class ComunicazioneAziendaleService {
     private ComunicazioneAziendaleRepository comunicazioneAziendaleRepository;
     @Autowired
     private ComunicazioneAziendaleMapper comunicazioneAziendaleMapper;
+    @Autowired
+    private DipendenteService dipendenteService;
 
     public ComunicazioneAziendale getById(Long id) throws MyEntityNotFoundException {
         return comunicazioneAziendaleRepository
@@ -35,18 +38,19 @@ public class ComunicazioneAziendaleService {
         return new EntityIdResponse(comunicazioneAziendaleRepository.save(comunicazioneAziendale).getId());
     }
 
-    public EntityIdResponse updateComunicazioneAziendale(Long id, ComunicazioneAziendaleResponse response) {
-        ComunicazioneAziendale comunicazioneAziendale = comunicazioneAziendaleRepository
-                .findById(id)
-                .orElseThrow(
-                        () -> new MyEntityNotFoundException("La comunicazione aziendale con id " + id + " non esiste"));
-        comunicazioneAziendale.setTesto(response.testo());
-        comunicazioneAziendale.setAllegato_url(response.allegato_url());
-
+    public EntityIdResponse updateComunicazioneAziendale(Long id, UpdateComunicazioneAziendaleRequest response) {
+        ComunicazioneAziendale comunicazioneAziendale = getById(id);
+        if (response.testo() != null) comunicazioneAziendale.setTesto(response.testo());
+        if (response.allegato_url() != null) comunicazioneAziendale.setAllegato_url(response.allegato_url());
+        if (response.idDipendente() != null)
+            comunicazioneAziendale.setIdDipendente(dipendenteService.getById(response.idDipendente().id()));
+        if (response.testo() == null && response.allegato_url() == null && response.idDipendente() == null)
+            throw new MyIllegalException("Per fare un update devi almeno inserire un campo");
         return new EntityIdResponse(comunicazioneAziendaleRepository.save(comunicazioneAziendale).getId());
     }
 
     public void deleteById(Long id) {
-        comunicazioneAziendaleRepository.deleteById(id);
+        ComunicazioneAziendale comunicazioneAziendale = getById(id);
+        comunicazioneAziendaleRepository.deleteById(comunicazioneAziendale.getId());
     }
 }

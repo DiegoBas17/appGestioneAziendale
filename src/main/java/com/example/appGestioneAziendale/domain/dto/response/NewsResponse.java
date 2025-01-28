@@ -11,6 +11,6 @@ public record NewsResponse(
         String testo,
         String image_url,
         String allegato,
-        List<Long> idPublisher
+        Long idPublisher
 ) {
 }

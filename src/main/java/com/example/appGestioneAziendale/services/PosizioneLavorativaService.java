@@ -9,9 +9,11 @@ import com.example.appGestioneAziendale.domain.exceptions.MyEntityNotFoundExcept
 import com.example.appGestioneAziendale.mappers.PosizioneLavorativaMapper;
 import com.example.appGestioneAziendale.repository.PosizioneLavorativaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class PosizioneLavorativaService {
     @Autowired
     private PosizioneLavorativaRepository posizioneLavorativaRepository;
