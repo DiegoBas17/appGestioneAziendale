@@ -25,6 +25,8 @@ public record CreateDipendenteRequest(
         @NotBlank(message = "Problemi con l'Avatar")
         String avatar,
         @NotBlank(message = "Il ruolo non può essere blank o null")
-        String ruolo
+        String ruolo,
+        @NotNull
+        Long idPosizioneLavorativa
 ) {
 }
