@@ -42,7 +42,7 @@ public class CommentoController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<GenericResponse> deleteById(@PathVariable Long id) {
-        commentoService.deleteDipendente(id);
+        commentoService.deleteCommento(id);
         return new ResponseEntity<>(
                 new GenericResponse("Commento con id " + id + " eliminato correttamente"), HttpStatus.OK);
     }

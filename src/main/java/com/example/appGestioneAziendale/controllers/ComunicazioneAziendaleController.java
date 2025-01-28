@@ -1,7 +1,7 @@
 package com.example.appGestioneAziendale.controllers;
 
 import com.example.appGestioneAziendale.domain.dto.requests.ComunicazioneAziendaleRequest;
-import com.example.appGestioneAziendale.domain.dto.response.ComunicazioneAziendaleResponse;
+import com.example.appGestioneAziendale.domain.dto.requests.UpdateComunicazioneAziendaleRequest;
 import com.example.appGestioneAziendale.domain.dto.response.EntityIdResponse;
 import com.example.appGestioneAziendale.domain.entities.ComunicazioneAziendale;
 import com.example.appGestioneAziendale.services.ComunicazioneAziendaleService;
@@ -41,7 +41,7 @@ public class ComunicazioneAziendaleController {
     @PutMapping("/update/{id}")
     public ResponseEntity<EntityIdResponse> updateComunicazioneAziendale(
             @PathVariable Long id,
-            @Valid @RequestBody ComunicazioneAziendaleResponse response) {
+            @Valid @RequestBody UpdateComunicazioneAziendaleRequest response) {
         return new ResponseEntity<>(comunicazioneAziendaleService.updateComunicazioneAziendale(id, response), HttpStatus.OK);
     }
 
