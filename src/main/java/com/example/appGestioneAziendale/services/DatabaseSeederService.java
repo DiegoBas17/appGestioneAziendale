@@ -21,12 +21,16 @@ public class DatabaseSeederService {
     private DipartimentoService dipartimentoService;
     @Autowired
     private PosizioneLavorativaService posizioneLavorativaService;
+    @Autowired
+    private NewsService newsService;
 
     public void createDatabase() {
         Faker faker = new Faker(Locale.ITALIAN);
         List<Long> comuniId = new ArrayList<>();
         List<Long> dipartimentiId = new ArrayList<>();
         List<Long> posizioniLavorativeId = new ArrayList<>();
+        List<Long> dipendentiId = new ArrayList<>();
+        List<Long> newsId = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
             ComuneRequest comuneRequest = new ComuneRequest(faker.gameOfThrones().city(), faker.elderScrolls().city());
             comuniId.add(comuneService.createComune(comuneRequest).id());
@@ -56,7 +60,12 @@ public class DatabaseSeederService {
                     "UTENTE",
                     randomPosizioneLavorativaId
             );
-            dipendenteService.createDipendente(createDipendenteRequest);
+            dipendentiId.add(dipendenteService.createDipendente(createDipendenteRequest).id());
+        }
+        for (int i = 0; i < 3; i++) {
+            Long randomPublisherId = dipartimentiId.get(new Random().nextInt(dipendentiId.size()));
+            CreateNewsRequest createNewsRequest = new CreateNewsRequest(faker.book().title(), faker.chuckNorris().fact(), faker.internet().image(), faker.internet().image(), randomPublisherId);
+            newsId.add(newsService.createNews(createNewsRequest).id());
         }
     }
 }
