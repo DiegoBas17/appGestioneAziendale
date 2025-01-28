@@ -1,11 +1,10 @@
 package com.example.appGestioneAziendale.domain.dto.requests;
-
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public record LikeRequest(
-    @NotBlank(message = "NewsId non può essere blank o null")
+    @NotNull(message = "NewsId non può essere blank o null")
     Long NewsId,
-    @NotBlank(message = "DipendenteId non può essere blank o null")
+    @NotNull(message = "DipendenteId non può essere blank o null")
     Long DipendenteId
 ) {
 }
