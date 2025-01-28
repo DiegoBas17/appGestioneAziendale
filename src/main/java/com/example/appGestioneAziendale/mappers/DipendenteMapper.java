@@ -16,7 +16,7 @@ public class DipendenteMapper {
     public Dipendente fromCreateDipendenteRequest(CreateDipendenteRequest request) {
         Ruolo ruolo;
         try {
-            ruolo = Ruolo.valueOf(request.ruolo());
+            ruolo = Ruolo.valueOf(request.ruolo().toUpperCase());
         } catch (IllegalArgumentException e) {
             throw new MyIllegalException("Ruolo inserito non valido!");
         }
