@@ -38,54 +38,39 @@ public class DatabaseSeederService {
         List<Long> dipendentiId = new ArrayList<>();
         List<Long> newsId = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
-            ComuneRequest comuneRequest = new ComuneRequest(faker.gameOfThrones().city(), faker.elderScrolls().city());
-            comuniId.add(comuneService.createComune(comuneRequest).id());
+            comuniId.add(comuneService.createComune(new ComuneRequest(faker.gameOfThrones().city(), faker.elderScrolls().city())).id());
         }
         for (int i = 0; i < 3; i++) {
-            DipartimentoRequest dipartimentoRequest = new DipartimentoRequest(faker.pokemon().location(), faker.leagueOfLegends().champion());
-            dipartimentiId.add(dipartimentoService.createDipartimento(dipartimentoRequest).id());
+            dipartimentiId.add(dipartimentoService.createDipartimento(new DipartimentoRequest(faker.pokemon().location(), faker.leagueOfLegends().champion())).id());
         }
         for (int i = 0; i < 3; i++) {
-            Long randomDipartimentoId = dipartimentiId.get(new Random().nextInt(dipartimentiId.size()));
-            PosizioneLavorativaRequest posizioneLavorativaRequest = new PosizioneLavorativaRequest(faker.company().profession(), faker.chuckNorris().fact(), randomDipartimentoId);
-            posizioniLavorativeId.add(posizioneLavorativaService.createPosizioneLavorativa(posizioneLavorativaRequest).id());
+            posizioniLavorativeId.add(posizioneLavorativaService.createPosizioneLavorativa(new PosizioneLavorativaRequest(faker.company().profession(), faker.chuckNorris().fact(), dipartimentiId.get(new Random().nextInt(dipartimentiId.size())))).id());
         }
         for (int i = 0; i < 5; i++) {
-            Long randomComuneId = comuniId.get(new Random().nextInt(comuniId.size()));
-            Long randomPosizioneLavorativaId = posizioniLavorativeId.get(new Random().nextInt(posizioniLavorativeId.size()));
-            CreateDipendenteRequest createDipendenteRequest = new CreateDipendenteRequest(
+            dipendentiId.add(dipendenteService.createDipendente(new CreateDipendenteRequest(
                     faker.dragonBall().character(),
                     faker.funnyName().name(),
                     faker.internet().emailAddress(),
                     "1234",
-                    new EntityIdRequest(randomComuneId),
+                    new EntityIdRequest(comuniId.get(new Random().nextInt(comuniId.size()))),
                     LocalDate.of(1990, 02, 25),
                     faker.phoneNumber().cellPhone(),
                     faker.avatar().image(),
                     "UTENTE",
-                    randomPosizioneLavorativaId
-            );
-            dipendentiId.add(dipendenteService.createDipendente(createDipendenteRequest).id());
+                    posizioniLavorativeId.get(new Random().nextInt(posizioniLavorativeId.size()))
+            )).id());
         }
         for (int i = 0; i < 3; i++) {
-            Long randomPublisherId = dipendentiId.get(new Random().nextInt(dipendentiId.size()));
-            CreateNewsRequest createNewsRequest = new CreateNewsRequest(faker.book().title(), faker.chuckNorris().fact(), faker.internet().image(), faker.internet().image(), randomPublisherId);
-            newsId.add(newsService.createNews(createNewsRequest).id());
+            newsId.add(newsService.createNews(new CreateNewsRequest(faker.book().title(), faker.chuckNorris().fact(), faker.internet().image(), faker.internet().image(), dipendentiId.get(new Random().nextInt(dipendentiId.size())))).id());
         }
         for (int i = 0; i < 3; i++) {
-            Long randomNewsId = newsId.get(new Random().nextInt(newsId.size()));
-            Long randomPublisherId = dipendentiId.get(new Random().nextInt(dipendentiId.size()));
-            CreateCommentoRequest createCommentoRequest = new CreateCommentoRequest(faker.chuckNorris().fact(), new EntityIdRequest(randomNewsId), new EntityIdRequest(randomPublisherId));
-            commentoService.createCommento(createCommentoRequest);
+            commentoService.createCommento(new CreateCommentoRequest(faker.chuckNorris().fact(), new EntityIdRequest(newsId.get(new Random().nextInt(newsId.size()))), new EntityIdRequest(dipendentiId.get(new Random().nextInt(dipendentiId.size())))));
         }
-        for (int i = 0; i < newsId.size(); i++) {
-            Long randomPublisherId = dipendentiId.get(new Random().nextInt(dipendentiId.size()));
-            likeService.createLike(new LikeRequest(newsId.get(i), randomPublisherId));
+        for (Long aLong : newsId) {
+            likeService.createLike(new LikeRequest(aLong, dipendentiId.get(new Random().nextInt(dipendentiId.size()))));
         }
         for (int i = 0; i < 3; i++) {
-            Long randomPublisherId = dipendentiId.get(new Random().nextInt(dipendentiId.size()));
-            ComunicazioneAziendaleRequest comunicazioneAziendaleRequest = new ComunicazioneAziendaleRequest(faker.pokemon().name(), faker.book().title(), faker.file().fileName());
-            comunicazioneAziendaleService.createComunicazioneAziendale(randomPublisherId, comunicazioneAziendaleRequest);
+            comunicazioneAziendaleService.createComunicazioneAziendale(dipendentiId.get(new Random().nextInt(dipendentiId.size())), new ComunicazioneAziendaleRequest(faker.pokemon().name(), faker.book().title(), faker.file().fileName()));
         }
     }
 }
