@@ -23,6 +23,12 @@ public class DatabaseSeederService {
     private PosizioneLavorativaService posizioneLavorativaService;
     @Autowired
     private NewsService newsService;
+    @Autowired
+    private CommentoService commentoService;
+    @Autowired
+    private LikeService likeService;
+    @Autowired
+    private ComunicazioneAziendaleService comunicazioneAziendaleService;
 
     public void createDatabase() {
         Faker faker = new Faker(Locale.ITALIAN);
@@ -47,13 +53,12 @@ public class DatabaseSeederService {
         for (int i = 0; i < 5; i++) {
             Long randomComuneId = comuniId.get(new Random().nextInt(comuniId.size()));
             Long randomPosizioneLavorativaId = posizioniLavorativeId.get(new Random().nextInt(posizioniLavorativeId.size()));
-            EntityIdRequest entityIdRequest = new EntityIdRequest(randomComuneId);
             CreateDipendenteRequest createDipendenteRequest = new CreateDipendenteRequest(
                     faker.dragonBall().character(),
                     faker.funnyName().name(),
                     faker.internet().emailAddress(),
                     "1234",
-                    entityIdRequest,
+                    new EntityIdRequest(randomComuneId),
                     LocalDate.of(1990, 02, 25),
                     faker.phoneNumber().cellPhone(),
                     faker.avatar().image(),
@@ -63,9 +68,24 @@ public class DatabaseSeederService {
             dipendentiId.add(dipendenteService.createDipendente(createDipendenteRequest).id());
         }
         for (int i = 0; i < 3; i++) {
-            Long randomPublisherId = dipartimentiId.get(new Random().nextInt(dipendentiId.size()));
+            Long randomPublisherId = dipendentiId.get(new Random().nextInt(dipendentiId.size()));
             CreateNewsRequest createNewsRequest = new CreateNewsRequest(faker.book().title(), faker.chuckNorris().fact(), faker.internet().image(), faker.internet().image(), randomPublisherId);
             newsId.add(newsService.createNews(createNewsRequest).id());
+        }
+        for (int i = 0; i < 3; i++) {
+            Long randomNewsId = newsId.get(new Random().nextInt(newsId.size()));
+            Long randomPublisherId = dipendentiId.get(new Random().nextInt(dipendentiId.size()));
+            CreateCommentoRequest createCommentoRequest = new CreateCommentoRequest(faker.chuckNorris().fact(), new EntityIdRequest(randomNewsId), new EntityIdRequest(randomPublisherId));
+            commentoService.createCommento(createCommentoRequest);
+        }
+        for (int i = 0; i < newsId.size(); i++) {
+            Long randomPublisherId = dipendentiId.get(new Random().nextInt(dipendentiId.size()));
+            likeService.createLike(new LikeRequest(newsId.get(i), randomPublisherId));
+        }
+        for (int i = 0; i < 3; i++) {
+            Long randomPublisherId = dipendentiId.get(new Random().nextInt(dipendentiId.size()));
+            ComunicazioneAziendaleRequest comunicazioneAziendaleRequest = new ComunicazioneAziendaleRequest(faker.pokemon().name(), faker.book().title(), faker.file().fileName());
+            comunicazioneAziendaleService.createComunicazioneAziendale(randomPublisherId, comunicazioneAziendaleRequest);
         }
     }
 }
