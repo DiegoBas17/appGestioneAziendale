@@ -8,8 +8,13 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
 
 @Getter
 @Setter
@@ -19,7 +24,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "dipendente")
 @EntityListeners(AuditingEntityListener.class)
-public class Dipendente {
+public class Dipendente implements UserDetails {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,6 +48,8 @@ public class Dipendente {
     private String avatar;
     @Column(nullable = false)
     private Ruolo ruolo;
+    @Column(name = "registration_token")
+    private String registrationToken;
     @ManyToOne
     @JoinColumn(name = "id_posizione_lavorativa", referencedColumnName = "id")
     private PosizioneLavorativa idPosizioneLavorativa;
@@ -58,4 +65,16 @@ public class Dipendente {
     @LastModifiedBy
     @Column(name = "last_modified_by")
     private Long lastModifiedBy;
+    @Column(name = "last_login")
+    private LocalDateTime lastLogin;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
 }

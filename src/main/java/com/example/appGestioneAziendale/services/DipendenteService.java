@@ -36,6 +36,10 @@ public class DipendenteService {
         return new EntityIdResponse(dipendente.getId());
     }
 
+    public void insertDipendente(Dipendente dipendente) {
+        dipendenteRepository.save(dipendente);
+    }
+
     public EntityIdResponse updateDipendente(Long id, UpdateDipendenteRequest request) {
         Dipendente myDipendente = getById(id);
         Ruolo ruolo;
@@ -54,6 +58,12 @@ public class DipendenteService {
         if (request.avatar() != null) myDipendente.setAvatar(request.avatar());
         if (request.ruolo() != null) myDipendente.setRuolo(ruolo);
         return new EntityIdResponse(dipendenteRepository.save(myDipendente).getId());
+    }
+
+    public Dipendente getByEmail(String email) throws MyEntityNotFoundException {
+        return dipendenteRepository
+                .findByEmail(email)
+                .orElseThrow(() -> new MyEntityNotFoundException("utente con email " + email + " non trovato"));
     }
 
     public void deleteDipendente(Long id) {
