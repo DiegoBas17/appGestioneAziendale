@@ -1,6 +1,7 @@
 package com.example.appGestioneAziendale.security;
 
 import com.example.appGestioneAziendale.domain.dto.response.ErrorResponse;
+import com.example.appGestioneAziendale.services.TokenBlackListService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.MalformedJwtException;
 import jakarta.servlet.FilterChain;
@@ -28,6 +29,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private JwtService jwtService;
     @Autowired
     private UserDetailsService userDetailsService;
+    @Autowired
+    private TokenBlackListService tokenBlackListService;
     @Setter
     private List<String> publicEndpoints;
 
@@ -50,16 +53,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             sendAuthErrorResponse(response, "MalformedTokenException", "Token JWT mancante o malformato");
             return;
         }
-        //per il logout
-       /* jwt = authHeader.substring(7);
-        System.out.println("il mio cazzo di token è: " + jwt);
+        jwt = authHeader.substring(7);
         if (tokenBlackListService.isPresentToken(jwt)) {
             sendAuthErrorResponse(response, "TokenExpiredException",
                     "Token nella blacklist, non è più valido!");
         }
         email = jwtService.extractUsername(jwt);
-        // se il login è corretto inserisco il token nel contesto di sicurezza dell'applicazione
-        // quindi in sostanza da quel momento il token sarà valido per l'autenticazione
         try {
             if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = userDetailsService.loadUserByUsername(email);
@@ -70,6 +69,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 );
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
+                if (userDetails.getAuthorities().stream()
+                        .anyMatch(auth -> auth.getAuthority().equals("TOCONFIRM"))) {
+                    sendAuthErrorResponse(response, "AccessDeniedException", "Devi confermare l'account!");
+                    return;
+                }
             }
         } catch (MalformedJwtException e) {
             sendAuthErrorResponse(response, "MalformedTokenException", "Token JWT mancante o malformato");
@@ -77,7 +81,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             sendAuthErrorResponse(response, "UsernameNotFoundException", "Username non trovato");
         }
         filterChain.doFilter(request,response);
-        }*/
     }
 
     private void sendAuthErrorResponse(HttpServletResponse response,
