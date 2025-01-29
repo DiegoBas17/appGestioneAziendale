@@ -25,10 +25,9 @@ import java.util.List;
 @Table(name = "dipendente")
 @EntityListeners(AuditingEntityListener.class)
 public class Dipendente implements UserDetails {
-    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
     @Column(nullable = false)
     private String nome;
     @Column(nullable = false)
@@ -44,7 +43,7 @@ public class Dipendente implements UserDetails {
     private LocalDate dataDiNascita;
     @Column(nullable = false)
     private String telefono;
-    @Column(nullable = false, columnDefinition = "LONGTEXT")
+    @Column(nullable = false)
     private String avatar;
     @Column(nullable = false)
     private Ruolo ruolo;
@@ -52,7 +51,9 @@ public class Dipendente implements UserDetails {
     private String registrationToken;
     @ManyToOne
     @JoinColumn(name = "id_posizione_lavorativa", referencedColumnName = "id")
-    private PosizioneLavorativa idPosizioneLavorativa;
+    private PosizioneLavorativa posizioneLavorativa;
+    @Column(name = "last_login")
+    private LocalDateTime lastLogin;
     @CreatedDate
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -65,8 +66,6 @@ public class Dipendente implements UserDetails {
     @LastModifiedBy
     @Column(name = "last_modified_by")
     private Long lastModifiedBy;
-    @Column(name = "last_login")
-    private LocalDateTime lastLogin;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

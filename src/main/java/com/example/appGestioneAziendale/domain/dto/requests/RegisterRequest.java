@@ -22,7 +22,7 @@ public record RegisterRequest(
         @Pattern(
                 regexp = "^\\+?[0-9]+$",
                 message = "Telefono non valido")
-        String numero,
+        String telefono,
         String avatar
 ) {
 }

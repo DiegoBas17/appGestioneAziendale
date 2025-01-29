@@ -2,12 +2,12 @@ package com.example.appGestioneAziendale.mappers;
 
 import com.example.appGestioneAziendale.domain.dto.requests.CreateDipendenteRequest;
 import com.example.appGestioneAziendale.domain.entities.Dipendente;
-import com.example.appGestioneAziendale.domain.entities.PosizioneLavorativa;
 import com.example.appGestioneAziendale.domain.enums.Ruolo;
 import com.example.appGestioneAziendale.domain.exceptions.MyIllegalException;
-import com.example.appGestioneAziendale.repository.PosizioneLavorativaRepository;
 import com.example.appGestioneAziendale.services.ComuneService;
+import com.example.appGestioneAziendale.services.PosizioneLavorativaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,14 +16,11 @@ public class DipendenteMapper {
     private ComuneService comuneService;
 
     @Autowired
-    private PosizioneLavorativaRepository posizioneLavorativaRepository;
+    private PosizioneLavorativaService posizioneLavorativaService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public Dipendente fromCreateDipendenteRequest(CreateDipendenteRequest request) {
-        PosizioneLavorativa posizioneLavorativa = posizioneLavorativaRepository
-                .findById(request.idPosizioneLavorativa())
-                .orElseThrow(() -> new IllegalArgumentException
-                        ("Posizione lavorativa con ID " + request.idPosizioneLavorativa()+ "non trovato"));
-
         Ruolo ruolo;
         try {
             ruolo = Ruolo.valueOf(request.ruolo().toUpperCase());
@@ -34,13 +31,13 @@ public class DipendenteMapper {
                 .nome(request.nome())
                 .cognome(request.cognome())
                 .email(request.email())
-                .password(request.password())
+                .password(passwordEncoder.encode(request.password()))
                 .comuneDiNascita(comuneService.getById(request.comune_di_nascita().id()))
                 .dataDiNascita(request.data_di_nascita())
                 .telefono(request.telefono())
                 .avatar(request.avatar())
                 .ruolo(ruolo)
-                .idPosizioneLavorativa(posizioneLavorativa)
+                .posizioneLavorativa(posizioneLavorativaService.getById(request.idPosizioneLavorativa()))
                 .build();
     }
 }

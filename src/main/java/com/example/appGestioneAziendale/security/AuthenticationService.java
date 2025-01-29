@@ -4,6 +4,7 @@ import com.example.appGestioneAziendale.domain.dto.requests.AuthRequest;
 import com.example.appGestioneAziendale.domain.dto.requests.RegisterRequest;
 import com.example.appGestioneAziendale.domain.dto.response.AuthenticationResponse;
 import com.example.appGestioneAziendale.domain.entities.Dipendente;
+import com.example.appGestioneAziendale.domain.enums.Ruolo;
 import com.example.appGestioneAziendale.services.ComuneService;
 import com.example.appGestioneAziendale.services.DipendenteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class AuthenticationService {
     private AuthenticationManager authenticationManager;
 
 
-    public AuthenticationResponse register(RegisterRequest request){
+    public AuthenticationResponse register(RegisterRequest request) {
         Dipendente dipendente = Dipendente
                 .builder()
                 .nome(request.nome())
@@ -37,8 +38,9 @@ public class AuthenticationService {
                 .avatar(request.avatar())
                 .dataDiNascita(request.dataDiNascita())
                 .password(passwordEncoder.encode(request.password()))
-                .telefono(request.numero())
+                .telefono(request.telefono())
                 .comuneDiNascita(comuneService.getById(request.comune()))
+                .ruolo(Ruolo.UTENTE)
                 .build();
         String jwtToken = jwtService.generateToken(dipendente);
         dipendente.setRegistrationToken(jwtToken);
