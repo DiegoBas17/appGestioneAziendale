@@ -35,12 +35,12 @@ public class AuthenticationController {
         return new ResponseEntity<>(authenticationService.logout(id_utente, token), HttpStatus.CREATED);
     }
 
-    @GetMapping("/confirm")
+    @GetMapping("/conferma")
     public ResponseEntity<GenericResponse> confirmRegistration(@RequestParam String token) {
         return new ResponseEntity<>(authenticationService.confirmRegistration(token), HttpStatus.CREATED);
     }
 
-    @PostMapping("/change_pw/{id_utente}")
+    @PostMapping("/cambia_password/{id_utente}")
     public ResponseEntity<?> changePassword(@PathVariable Long idDipendente, @RequestBody CambiaPasswordRequest request) {
         Object result = authenticationService.changePassword(idDipendente, request);
         if (result.getClass() == GenericResponse.class) {

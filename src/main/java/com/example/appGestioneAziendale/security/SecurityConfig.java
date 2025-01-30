@@ -25,6 +25,7 @@ public class SecurityConfig {
         List<String> publicEndpoints = List.of(
                 "/auth/register",
                 "/auth/login",
+                "/auth/conferma",
                 "/start-db"
         );
         jwtAuthFilter.setPublicEndpoints(publicEndpoints);

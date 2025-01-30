@@ -17,7 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Properties;
 
 @Configuration
-public class appConfig {
+public class AppConfig {
     @Autowired
     private DipendenteRepository dipendenteRepository;
 
@@ -26,8 +26,8 @@ public class appConfig {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost("smtp.gmail.com");
         mailSender.setPort(25);
-        mailSender.setUsername("sjjsjs");
-        mailSender.setPassword("ksks");
+        mailSender.setUsername("fcramerotti91@gmail.com");
+        mailSender.setPassword("bxot lnji cblg onxb");
         Properties properties = mailSender.getJavaMailProperties();
         properties.put("mail.transport.protocol", "smtp");
         properties.put("mail.smtp.auth", "true");

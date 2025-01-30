@@ -55,7 +55,7 @@ public class AuthenticationService {
         String jwtToken = jwtService.generateToken(dipendente);
         dipendente.setRegistrationToken(jwtToken);
         dipendenteService.insertDipendente(dipendente);
-        String confirmationUrl = "http://localhost:8080/auth/confirm?token=" + dipendente.getRegistrationToken();
+        String confirmationUrl = "http://localhost:8080/auth/conferma?token=" + dipendente.getRegistrationToken();
         javaMailSender.send(createConfirmationEmail(dipendente.getEmail(), confirmationUrl));
         return AuthenticationResponse.builder().token(jwtToken).build();
     }
@@ -66,7 +66,7 @@ public class AuthenticationService {
         message.setReplyTo("fcramerotti91@gmail.com"); // a chi rispondo se faccio "rispondi"
         message.setFrom("fcramerotti91@gmail.com"); // da chi viene la mail
         message.setSubject("CONFERMA REGISTRAZIONE, SEMPRE FORZA MAGGGICA");
-        message.setText("Ciao! Clicca su questo link per confermare la registrazione! " + confirmationUrl);
+        message.setText("Ciao lupacchiotto, clicca qui per essere un vero tifoso DA MAGGGICAAA " + confirmationUrl);
         return message;
     }
 
