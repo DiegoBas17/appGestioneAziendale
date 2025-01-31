@@ -40,11 +40,9 @@ public class ComunicazioneScheduledService implements Job {
      */
     public EntityIdResponse createComunicazioneScheduled(ComunicazioneScheduledRequest request)
             throws MyEntityNotFoundException, SchedulingException, SchedulerException {
-        // Recupera l'entità Dipendente associata
         Dipendente dipendente = dipendenteService.getById(request.idDipendente());
-
-        // Crea e salva l'entità ComunicazioneScheduled
         ComunicazioneScheduled comunicazioneScheduled = ComunicazioneScheduled.builder()
+                .titolo(request.titolo())
                 .testo(request.testo())
                 .allegato_url(request.allegato_url())
                 .publishTime(request.publishTime())
@@ -133,6 +131,7 @@ public class ComunicazioneScheduledService implements Job {
 
         // Ricrea il job per i nuovi dettagli
         return createComunicazioneScheduled(ComunicazioneScheduledRequest.builder()
+                .titolo(comunicazioneScheduled.getTitolo())
                 .testo(comunicazioneScheduled.getTesto())
                 .publishTime(comunicazioneScheduled.getPublishTime())
                 .idDipendente(comunicazioneScheduled.getIdDipendente().getId())

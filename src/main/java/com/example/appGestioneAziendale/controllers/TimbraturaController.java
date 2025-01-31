@@ -32,4 +32,9 @@ public class TimbraturaController {
     public ResponseEntity<EntityIdResponse> createTimbratura(@RequestBody TimbraturaRequest request) {
         return new ResponseEntity<>(timbraturaService.createTimbratura(request), HttpStatus.CREATED);
     }
+
+    @PostMapping("/update/{idTimbratura}")
+    public ResponseEntity<Timbratura> updateTimbratura(@PathVariable Long idTimbratura, @RequestBody TimbraturaRequest request) {
+        return new ResponseEntity<>(timbraturaService.updateTimbratura(idTimbratura, request), HttpStatus.CREATED);
+    }
 }

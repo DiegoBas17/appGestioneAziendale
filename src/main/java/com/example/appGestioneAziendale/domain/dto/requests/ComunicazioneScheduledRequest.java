@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 
 @Builder
 public record ComunicazioneScheduledRequest(
+        @NotBlank(message = "Il titolo non può essere blank o null")
+        String titolo,
         @NotBlank String testo,
         @Future LocalDateTime publishTime,
         @NotBlank String allegato_url,
