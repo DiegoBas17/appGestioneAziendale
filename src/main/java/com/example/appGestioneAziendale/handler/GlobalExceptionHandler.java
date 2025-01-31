@@ -5,10 +5,12 @@ import com.example.appGestioneAziendale.domain.exceptions.IllegalTransactionExce
 import com.example.appGestioneAziendale.domain.exceptions.MyEntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
+@ControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(MyEntityNotFoundException.class)
     public ResponseEntity<ErrorResponse> handle(MyEntityNotFoundException exception) {
@@ -44,6 +46,10 @@ public class GlobalExceptionHandler {
     }
 
 
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleException(Exception ex) {
+        return ResponseEntity.status(500).body("Errore: " + ex.getMessage());
+    }
 
 
 }

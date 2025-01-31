@@ -1,5 +1,5 @@
 package com.example.appGestioneAziendale.domain.enums;
 
 public enum Ruolo {
-    UTENTE, ADMIN
+    DA_CONFERMARE, UTENTE, ADMIN, SUPER_ADMIN
 }

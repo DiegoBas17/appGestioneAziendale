@@ -23,8 +23,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         List<String> publicEndpoints = List.of(
-                "/app/v1/auth/register",
-                "/app/v1/auth/login"
+                "/auth/register",
+                "/auth/login",
+                "/start-db",
+                "/comuni/create"
         );
         jwtAuthFilter.setPublicEndpoints(publicEndpoints);
         http.csrf(AbstractHttpConfigurer::disable)
