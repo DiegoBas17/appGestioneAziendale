@@ -103,9 +103,9 @@ public class ComunicazioneScheduledService implements Job {
 
             // Crea la comunicazione aziendale
             ComunicazioneAziendaleRequest request = new ComunicazioneAziendaleRequest(
-                    comunicazioneScheduled.getTitolo(),comunicazioneScheduled.getTesto(),comunicazioneScheduled.getAllegato_url());
+                    comunicazioneScheduled.getTitolo(), comunicazioneScheduled.getTesto(), comunicazioneScheduled.getAllegato_url());
 
-            comunicazioneService.createComunicazioneAziendale(dipendente.getId(),request);
+            comunicazioneService.createComunicazioneAziendale(dipendente.getId(), request);
 
             // Elimina la comunicazione schedulata
             comunicazioneScheduledRepository.deleteById(scheduledId);
@@ -133,7 +133,6 @@ public class ComunicazioneScheduledService implements Job {
 
         // Ricrea il job per i nuovi dettagli
         return createComunicazioneScheduled(ComunicazioneScheduledRequest.builder()
-                .id(comunicazioneScheduled.getId())
                 .testo(comunicazioneScheduled.getTesto())
                 .publishTime(comunicazioneScheduled.getPublishTime())
                 .idDipendente(comunicazioneScheduled.getIdDipendente().getId())

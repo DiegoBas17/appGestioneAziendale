@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 
 @Builder
 public record ComunicazioneScheduledRequest(
-        @NotNull Long id,
         @NotBlank String testo,
         @Future LocalDateTime publishTime,
         @NotBlank String allegato_url,
