@@ -7,9 +7,7 @@ import com.example.appGestioneAziendale.domain.entities.Like;
 import com.example.appGestioneAziendale.domain.entities.News;
 import com.example.appGestioneAziendale.domain.exceptions.MyEntityNotFoundException;
 import com.example.appGestioneAziendale.mappers.LikeMapper;
-import com.example.appGestioneAziendale.repository.DipendenteRepository;
 import com.example.appGestioneAziendale.repository.LikeRepository;
-import com.example.appGestioneAziendale.repository.NewsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,18 +18,16 @@ public class LikeService {
     @Autowired
     private LikeRepository likeRepository;
     @Autowired
-    private NewsRepository newsRepository;
+    private NewsService newsService;
     @Autowired
-    private DipendenteRepository dipendenteRepository;
+    private DipendenteService dipendenteService;
     @Autowired
     private LikeMapper likeMapper;
 
     public LikeResponse createLike(LikeRequest request) {
         // Recupero News e Dipendente
-        News news = newsRepository.findById(request.NewsId())
-                .orElseThrow(() -> new MyEntityNotFoundException("News non trovata con id: " + request.NewsId()));
-        Dipendente dipendente = dipendenteRepository.findById(request.DipendenteId())
-                .orElseThrow(() -> new MyEntityNotFoundException("Dipendente non trovato con id: " + request.DipendenteId()));
+        News news = newsService.getById(request.NewsId());
+        Dipendente dipendente = dipendenteService.getById(request.DipendenteId());
 
         // Verifico se ci sta il duplicato del like
         if (likeRepository.existsByNewsAndDipendente(news, dipendente)) {
@@ -64,8 +60,6 @@ public class LikeService {
         }
         likeRepository.deleteById(id);
     }
-
-
 
 
 }
