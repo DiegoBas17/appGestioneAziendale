@@ -24,9 +24,12 @@ public class ComunicazioneScheduled {
     private LocalDateTime publishTime;
     @Column(nullable = false)
     private String allegato_url;
+    @Column(nullable = false)
+    private String titolo;
     @ManyToOne
     @JoinColumn(name = "id_publisher", referencedColumnName = "id")
     private Dipendente idDipendente;
 
 
 }
+

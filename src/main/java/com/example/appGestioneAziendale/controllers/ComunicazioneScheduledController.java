@@ -6,6 +6,7 @@ import com.example.appGestioneAziendale.domain.dto.response.EntityIdResponse;
 import com.example.appGestioneAziendale.domain.dto.response.GenericResponse;
 import com.example.appGestioneAziendale.services.ComunicazioneScheduledService;
 import jakarta.validation.Valid;
+import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ public class ComunicazioneScheduledController {
     @PutMapping("/update/{id}")
     public ResponseEntity<EntityIdResponse> updateComunicazioneScheduled(@PathVariable Long id,
                                                                          @Valid @RequestBody ComunicazioneScheduledUpdateRequest request)
-            throws Exception {
+            throws SchedulerException {
         return new ResponseEntity<>(comunicazioneScheduledService.updateComunicazioneScheduled(id, request), HttpStatus.OK);
     }
 

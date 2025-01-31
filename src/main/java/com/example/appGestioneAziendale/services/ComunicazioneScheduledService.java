@@ -1,6 +1,5 @@
 package com.example.appGestioneAziendale.services;
 
-import com.example.appGestioneAziendale.controllers.ComunicazioneScheduledController;
 import com.example.appGestioneAziendale.domain.dto.requests.ComunicazioneAziendaleRequest;
 import com.example.appGestioneAziendale.domain.dto.requests.ComunicazioneScheduledRequest;
 import com.example.appGestioneAziendale.domain.dto.requests.ComunicazioneScheduledUpdateRequest;
@@ -10,12 +9,12 @@ import com.example.appGestioneAziendale.domain.entities.Dipendente;
 import com.example.appGestioneAziendale.domain.exceptions.IllegalTransactionException;
 import com.example.appGestioneAziendale.domain.exceptions.MyEntityNotFoundException;
 import com.example.appGestioneAziendale.repository.ComunicazioneScheduledRepository;
-import com.github.javafaker.Job;
+import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.SchedulingException;
-import org.springframework.scheduling.Trigger;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
@@ -34,24 +33,29 @@ public class ComunicazioneScheduledService implements Job {
     @Autowired
     private Scheduler scheduler;
 
+    /**
+     * Crea una nuova comunicazione schedulata, salva l'entità nel database e configura il job nel Scheduler.
+     *
+     * @param request richiesta contenente i dati della comunicazione
+     * @return l'ID della comunicazione salvata
+     */
     public EntityIdResponse createComunicazioneScheduled(ComunicazioneScheduledRequest request)
-            throws MyEntityNotFoundException, IllegalTransactionException, SchedulingException {
-        // Verifico che il dipendente esista e lo prendo
-        Dipendente dipendente = dipendenteService.getById(request.idDipendente().getId());
+            throws MyEntityNotFoundException, IllegalTransactionException, SchedulingException, SchedulerException {
+        // Recupera l'entità Dipendente associata
+        Dipendente dipendente = dipendenteService.getById(request.idDipendente());
 
+        // Crea e salva l'entità ComunicazioneScheduled
         ComunicazioneScheduled comunicazioneScheduled = ComunicazioneScheduled.builder()
                 .testo(request.testo())
                 .allegato_url(request.allegato_url())
                 .publishTime(request.publishTime())
                 .idDipendente(dipendente)
                 .build();
-
         comunicazioneScheduledRepository.save(comunicazioneScheduled);
 
-        // Creazione job e trigger
+        // Configura il job
         JobDetail jobDetails = buildJobDetail(comunicazioneScheduled);
-        Trigger trigger = buildJobTrigger(jobDetails, Date.from(
-                comunicazioneScheduled.getPublishTime().atZone(ZoneId.systemDefault()).toInstant()));
+        Trigger trigger = buildJobTrigger(jobDetails, convertToDate(comunicazioneScheduled.getPublishTime()));
 
         scheduler.scheduleJob(jobDetails, trigger);
 
@@ -78,56 +82,82 @@ public class ComunicazioneScheduledService implements Job {
                 .build();
     }
 
+    private Date convertToDate(LocalDateTime dateTime) {
+        return Date.from(dateTime.atZone(ZoneId.systemDefault()).toInstant());
+    }
+
+
+    /**
+     * Esegue il lavoro programmato e crea la comunicazione aziendale associata.
+     */
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
         JobDataMap jobDataMap = context.getMergedJobDataMap();
         Long scheduledId = jobDataMap.getLong("id");
 
         try {
-            // Callback metodo generazione comunicazione aziendale (ipotetico)
-            Dipendente dipendente = comunicazioneScheduledRepository.findById(scheduledId)
-                    .orElseThrow(() -> new JobExecutionException("Comunicazione non trovata")).getIdDipendente();
+            // Recupera la comunicazione schedulata
+            ComunicazioneScheduled comunicazioneScheduled = comunicazioneScheduledRepository.findById(scheduledId)
+                    .orElseThrow(() -> new JobExecutionException("Comunicazione non trovata"));
 
-            ComunicazioneAziendaleRequest request = ComunicazioneAziendaleRequest.builder()
-                    .idDipendente(dipendente.getId())
-                    .tipoOperazione("comunicazione")
-                    .build();
-            comunicazioneService.createComunicazioneAziendale(request);
-            comunicazioneScheduledRepository.deleteById(scheduledId); // Elimino
+            Dipendente dipendente = comunicazioneScheduled.getIdDipendente();
+
+            // Crea la comunicazione aziendale
+            ComunicazioneAziendaleRequest request = new ComunicazioneAziendaleRequest(
+                    comunicazioneScheduled.getTitolo(),comunicazioneScheduled.getTesto(),comunicazioneScheduled.getAllegato_url());
+
+            comunicazioneService.createComunicazioneAziendale(dipendente.getId(),request);
+
+            // Elimina la comunicazione schedulata
+            comunicazioneScheduledRepository.deleteById(scheduledId);
         } catch (Exception e) {
             throw new JobExecutionException("Errore durante l'esecuzione della comunicazione", e);
         }
     }
 
+    /**
+     * Aggiorna i dettagli di una comunicazione schedulata.
+     */
     public EntityIdResponse updateComunicazioneScheduled(Long id, ComunicazioneScheduledUpdateRequest request)
-            throws SchedulerException, IllegalTransactionException {
+            throws SchedulerException, MyEntityNotFoundException {
+        // Recupera la comunicazione dal database
         ComunicazioneScheduled comunicazioneScheduled = comunicazioneScheduledRepository.findById(id)
                 .orElseThrow(() -> new MyEntityNotFoundException("Comunicazione non trovata"));
 
-        // Rimuovo job precedente
+        // Elimina il precedente job
         JobKey jobKey = new JobKey(String.valueOf(comunicazioneScheduled.getId()), "comunicazioni");
         scheduler.deleteJob(jobKey);
 
-        // Aggiornamento entità e ricreazione Job
+        // Aggiorna i dettagli dell'entità
         comunicazioneScheduled.setPublishTime(request.publishTime());
         comunicazioneScheduledRepository.save(comunicazioneScheduled);
 
-        return createComunicazioneScheduled(ComunicazioneScheduledRequest.builder()
-                .id(comunicazioneScheduled.getId())
-                .testo(comunicazioneScheduled.getTesto())
-                .publishTime(comunicazioneScheduled.getPublishTime())
-                .idDipendente(comunicazioneScheduled.getIdDipendente())
-                .build());
+        // Ricrea il job per i nuovi dettagli
+        try {
+            return createComunicazioneScheduled(ComunicazioneScheduledRequest.builder()
+                    .id(comunicazioneScheduled.getId())
+                    .testo(comunicazioneScheduled.getTesto())
+                    .publishTime(comunicazioneScheduled.getPublishTime())
+                    .idDipendente(comunicazioneScheduled.getIdDipendente().getId())
+                    .build());
+        } catch (IllegalTransactionException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public void deleteComunicazioneScheduledById(Long id) throws SchedulingException {
-        ComunicazioneScheduledController comunicazioneScheduled = comunicazioneScheduledRepository
-                .findById(id)
-                .orElseThrow(() -> new MyEntityNotFoundException("Comunicazione schedulata con" + id + " non trovata"));
+    /**
+     * Elimina una comunicazione schedulata.
+     */
+    public void deleteComunicazioneScheduledById(Long id) throws SchedulerException, MyEntityNotFoundException {
+        // Recupera la comunicazione
+        ComunicazioneScheduled comunicazioneScheduled = comunicazioneScheduledRepository.findById(id)
+                .orElseThrow(() -> new MyEntityNotFoundException("Comunicazione schedulata con ID " + id + " non trovata"));
 
+        // Rimuove il job dallo scheduler
         JobKey jobKey = new JobKey(String.valueOf(comunicazioneScheduled.getId()), "comunicazioni");
         scheduler.deleteJob(jobKey);
 
+        // Elimina l'entità dal database
         comunicazioneScheduledRepository.deleteById(id);
     }
 }
