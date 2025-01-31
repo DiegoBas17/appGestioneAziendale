@@ -91,8 +91,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 .message(message)
                 .build();
         ObjectMapper objectMapper = new ObjectMapper();
-        String jsonReponse = objectMapper.writeValueAsString(errorResponse);
-        response.getWriter().write(jsonReponse);
+        String jsonResponse = objectMapper.writeValueAsString(errorResponse);
+        response.getWriter().write(jsonResponse);
         response.getWriter().flush();
     }
 
