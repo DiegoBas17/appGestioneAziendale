@@ -3,7 +3,7 @@ package com.example.appGestioneAziendale.mappers;
 import com.example.appGestioneAziendale.domain.dto.requests.TimbraturaRequest;
 import com.example.appGestioneAziendale.domain.entities.Dipendente;
 import com.example.appGestioneAziendale.domain.entities.Timbratura;
-import com.example.appGestioneAziendale.repository.DipendenteRepository;
+import com.example.appGestioneAziendale.services.DipendenteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,12 +12,10 @@ import java.time.LocalDateTime;
 @Service
 public class TimbraturaMapper {
     @Autowired
-    private DipendenteRepository dipendenteRepository;
+    private DipendenteService dipendenteService;
 
     public Timbratura fromTimbraturaRequest(TimbraturaRequest request) {
-        Dipendente dipendente = dipendenteRepository
-                .findById(request.idDipendente())
-                .orElseThrow(() -> new IllegalArgumentException("Dipartimento con ID : " + request.idDipendente() + " non trovato"));
+        Dipendente dipendente = dipendenteService.getById(request.idDipendente());
         if (request.ingresso() == null && request.inizioPausa() == null && request.finePausa() == null && request.uscita() == null)
             System.out.println("Ma che richiesta mi stai facendo?");
 

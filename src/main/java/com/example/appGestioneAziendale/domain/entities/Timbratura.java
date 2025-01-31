@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -19,13 +18,13 @@ public class Timbratura {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false)
+    @Column
     private LocalDateTime ingresso;
-    @Column(nullable = false)
+    @Column
     private LocalDateTime uscita;
-    @Column(nullable = false, name = "inizio_pausa_pranzo")
+    @Column(name = "inizio_pausa_pranzo")
     private LocalDateTime inizioPausaPranzo;
-    @Column(nullable = false, name = "fine_pausa_pranzo")
+    @Column(name = "fine_pausa_pranzo")
     private LocalDateTime finePausaPranzo;
     @ManyToOne
     @JoinColumn(name = "id_dipendente", referencedColumnName = "id")

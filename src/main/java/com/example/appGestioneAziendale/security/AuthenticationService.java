@@ -39,7 +39,7 @@ public class AuthenticationService {
     private JavaMailSender javaMailSender;
 
 
-    public AuthenticationResponse register(RegisterRequest request) {
+    public String register(RegisterRequest request) {
         Dipendente dipendente = Dipendente
                 .builder()
                 .nome(request.nome())
@@ -57,7 +57,9 @@ public class AuthenticationService {
         dipendenteService.insertDipendente(dipendente);
         String confirmationUrl = "http://localhost:8080/auth/conferma?token=" + dipendente.getRegistrationToken();
         javaMailSender.send(createConfirmationEmail(dipendente.getEmail(), confirmationUrl));
-        return AuthenticationResponse.builder().token(jwtToken).build();
+        AuthenticationResponse.builder().token(jwtToken).build();
+        ;
+        return "Dipendente in fase di registrazione, prego confermare la emil!";
     }
 
     private SimpleMailMessage createConfirmationEmail(String email, String confirmationUrl) {
@@ -109,8 +111,8 @@ public class AuthenticationService {
         return AuthenticationResponse.builder().token(token).build();
     }
 
-   public GenericResponse logout(Long idUtente, String token) {
-        tokenBlackListService.insertToken(idUtente,token);
+    public GenericResponse logout(Long idUtente, String token) {
+        tokenBlackListService.insertToken(idUtente, token);
         return GenericResponse.builder().message("Logout effettuato con successo").build();
     }
 }
