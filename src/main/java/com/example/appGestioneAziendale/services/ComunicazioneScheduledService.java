@@ -6,7 +6,6 @@ import com.example.appGestioneAziendale.domain.dto.requests.ComunicazioneSchedul
 import com.example.appGestioneAziendale.domain.dto.response.EntityIdResponse;
 import com.example.appGestioneAziendale.domain.entities.ComunicazioneScheduled;
 import com.example.appGestioneAziendale.domain.entities.Dipendente;
-import com.example.appGestioneAziendale.domain.exceptions.IllegalTransactionException;
 import com.example.appGestioneAziendale.domain.exceptions.MyEntityNotFoundException;
 import com.example.appGestioneAziendale.repository.ComunicazioneScheduledRepository;
 import org.quartz.*;
@@ -40,7 +39,7 @@ public class ComunicazioneScheduledService implements Job {
      * @return l'ID della comunicazione salvata
      */
     public EntityIdResponse createComunicazioneScheduled(ComunicazioneScheduledRequest request)
-            throws MyEntityNotFoundException, IllegalTransactionException, SchedulingException, SchedulerException {
+            throws MyEntityNotFoundException, SchedulingException, SchedulerException {
         // Recupera l'entità Dipendente associata
         Dipendente dipendente = dipendenteService.getById(request.idDipendente());
 
@@ -133,16 +132,12 @@ public class ComunicazioneScheduledService implements Job {
         comunicazioneScheduledRepository.save(comunicazioneScheduled);
 
         // Ricrea il job per i nuovi dettagli
-        try {
-            return createComunicazioneScheduled(ComunicazioneScheduledRequest.builder()
-                    .id(comunicazioneScheduled.getId())
-                    .testo(comunicazioneScheduled.getTesto())
-                    .publishTime(comunicazioneScheduled.getPublishTime())
-                    .idDipendente(comunicazioneScheduled.getIdDipendente().getId())
-                    .build());
-        } catch (IllegalTransactionException e) {
-            throw new RuntimeException(e);
-        }
+        return createComunicazioneScheduled(ComunicazioneScheduledRequest.builder()
+                .id(comunicazioneScheduled.getId())
+                .testo(comunicazioneScheduled.getTesto())
+                .publishTime(comunicazioneScheduled.getPublishTime())
+                .idDipendente(comunicazioneScheduled.getIdDipendente().getId())
+                .build());
     }
 
     /**
