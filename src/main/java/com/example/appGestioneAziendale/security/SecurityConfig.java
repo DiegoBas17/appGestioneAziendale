@@ -25,7 +25,8 @@ public class SecurityConfig {
         List<String> publicEndpoints = List.of(
                 "/auth/register",
                 "/auth/login",
-                "/start-db"
+                "/start-db",
+                "/comuni/create"
         );
         jwtAuthFilter.setPublicEndpoints(publicEndpoints);
         http.csrf(AbstractHttpConfigurer::disable)
