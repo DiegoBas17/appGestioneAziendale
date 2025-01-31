@@ -60,6 +60,12 @@ public class DipendenteService {
         return new EntityIdResponse(dipendenteRepository.save(myDipendente).getId());
     }
 
+    public Dipendente getByRegistrationToken(String token) {
+        return dipendenteRepository
+                .findByRegistrationToken(token)
+                .orElseThrow(() -> new MyEntityNotFoundException("utente con token " + token + " non trovato"));
+    }
+
     public Dipendente getByEmail(String email) throws MyEntityNotFoundException {
         return dipendenteRepository
                 .findByEmail(email)
